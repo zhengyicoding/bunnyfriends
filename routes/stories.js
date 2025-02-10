@@ -1,15 +1,59 @@
 import express from "express";
-import { db } from "../module/conn.js";
+import storyCol from "../db/storyCol.js";
 
 const router = express.Router();
+
+// Get all stories
 router.get("/", async (req, res) => {
   try {
-    console.log("GET entries");
-    const collection = db.collection("stories");
-    const entries = await collection.find({}).toArray();
-    res.json({ entries: entries });
+    const stories = await storyCol.getStories();
+    res.json(stories);
   } catch (error) {
-    console.error("GET api/stories error, error");
-    res.status(500).json({ error: "Failed to get stories" });
+    res.status(500).json({ error: error.message });
   }
 });
+
+// Create new story
+router.post("/", async (req, res) => {
+  try {
+    console.log("Received story data:", req.body);
+
+    // Validate incoming data
+    const { userName, title, bunnyName, content } = req.body;
+
+    if (!userName || !title || !bunnyName || !content) {
+      return res.status(400).json({
+        error: "Missing required fields",
+        received: req.body,
+      });
+    }
+
+    const story = await storyCol.createStory(req.body);
+    res.json(story);
+  } catch (error) {
+    console.error("Story creation error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update story
+router.post("/:id/update", async (req, res) => {
+  try {
+    const result = await storyCol.updateStory(req.params.id, req.body);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete story
+router.post("/:id/delete", async (req, res) => {
+  try {
+    await storyCol.deleteStory(req.params.id);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+export default router;

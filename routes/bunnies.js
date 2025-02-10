@@ -1,13 +1,16 @@
 import express from "express";
-import { db } from "../module/conn.js";
+import bunnyCol from "../db/bunnyCol.js";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const bunnies = await db.collection("bunnies").find({}).toArray();
-    res.json(bunnies);
+    console.log("GET bunnies");
+    const bunnies = await bunnyCol.getBunnies({});
+    console.log("Bunnies fetched");
+    res.status(200).json({ bunnies: bunnies });
   } catch (error) {
+    console.error("GET api/bunnies error", error);
     res.status(500).json({ error: "Failed to fetch bunnies" });
   }
 });

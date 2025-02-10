@@ -52,39 +52,58 @@
         <div class="col-md-8 mx-auto">
           <h2 class="mb-4">Bunny Stories Forum</h2>
 
-          <!-- Post Form -->
-          <div class="card mb-4">
-            <div class="card-body">
-              <form id="postForm">
-                <div class="mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="postTitle"
-                    placeholder="Your Story Title"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <textarea
-                    class="form-control"
-                    id="postContent"
-                    rows="3"
-                    placeholder="Share your bunny story..."
-                    required
-                  ></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">
-                  Post Story
-                </button>
-              </form>
+          <!-- Form for new posts -->
+          <form id="postForm" class="card p-3 mb-4">
+            <div class="mb-3">
+              <label for="userName" class="form-label">Your Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="userName"
+                name="userName"
+                required
+              />
             </div>
-          </div>
 
-          <!-- Posts Container -->
-          <div id="postsContainer">
-            <!-- Forum posts will be inserted here -->
-          </div>
+            <div class="mb-3">
+              <label for="postTitle" class="form-label">Story Title</label>
+              <input
+                type="text"
+                class="form-control"
+                id="postTitle"
+                name="postTitle"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="bunnySelect" class="form-label">Select Bunny</label>
+              <select
+                class="form-control"
+                id="bunnySelect"
+                name="bunnySelect"
+                required
+              >
+                <option value="">Choose a bunny...</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="postContent" class="form-label">Your Story</label>
+              <textarea
+                class="form-control"
+                id="postContent"
+                name="postContent"
+                rows="4"
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Post Story</button>
+          </form>
+
+          <!-- Container for existing posts -->
+          <div id="postsContainer"></div>
         </div>
       </div>
     </div>

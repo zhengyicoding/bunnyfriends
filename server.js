@@ -1,26 +1,30 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import { connectToDb } from "./module/conn.js";
+import "dotenv/config";
+import bunniesRouter from "./routes/bunnies.js";
+import storiesRouter from "./routes/stories.js";
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-import bunniesRouter from "./routes/bunnies.js";
-
-app.use("/api/bunnies/", bunniesRouter);
-
-app.use(express.static("frontend"));
+// 1. Essential middleware first
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// 2. Static file serving
+app.use(express.static("frontend"));
+
+// 3. Routes last
+app.use("/api/bunnies/", bunniesRouter);
+app.use("/api/stories/", storiesRouter);
+
 try {
-  connectToDb();
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 } catch (error) {
-  console.error("MongoDB connection error", error);
+  console.error("Server connection error", error);
   throw error;
 }
