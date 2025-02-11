@@ -77,7 +77,6 @@ async function loadBunnies() {
     const data = await response.json();
 
     const select = document.getElementById("bunnySelect");
-    console.log("Found select element:", select); // Debug line
 
     if (!select) {
       console.error("Could not find bunnySelect element");
@@ -96,7 +95,7 @@ async function loadBunnies() {
     console.error("Error loading bunnies:", error);
   }
 }
-
+// load and render stories in the database on the forum page
 async function loadStories() {
   console.log("Loading stories..."); // Debug log
   try {
@@ -125,7 +124,6 @@ function createStoryElement(story) {
   storyElement.className = "card mb-3";
   storyElement.setAttribute("data-story-id", story._id || "");
 
-  // Use nullish coalescing to provide fallbacks for all fields
   const title = story?.title ?? "Untitled";
   const userName = story?.userName ?? "Anonymous";
   const bunnyName = story?.bunnyName ?? "Not specified";
@@ -145,11 +143,52 @@ function createStoryElement(story) {
         <button class="btn btn-warning btn-sm edit-btn">Edit</button>
         <button class="btn btn-danger btn-sm delete-btn">Delete</button>
       </div>
-      <div class="edit-form" style="display:none">
-        <input type="text" class="form-control mb-2" value="${title}">
-        <textarea class="form-control mb-2">${content}</textarea>
-        <button class="btn btn-success btn-sm save-btn">Save</button>
-        <button class="btn btn-secondary btn-sm cancel-btn">Cancel</button>
+      <div class="edit-form mt-3" style="display:none">
+        <form class="card p-3 bg-light">
+          <div class="mb-3">
+            <label for="edit-username-${story._id}" class="form-label">Your Name</label>
+            <input 
+              type="text" 
+              class="form-control edit-username" 
+              id="edit-username-${story._id}" 
+              value="${userName}"
+              required
+            >
+          </div>
+          <div class="mb-3">
+            <label for="edit-title-${story._id}" class="form-label">Story Title</label>
+            <input 
+              type="text" 
+              class="form-control edit-title" 
+              id="edit-title-${story._id}" 
+              value="${title}"
+              required
+            >
+          </div>
+          <div class="mb-3">
+            <label for="edit-bunny-${story._id}" class="form-label">Select Bunny</label>
+            <select 
+              class="form-control edit-bunny" 
+              id="edit-bunny-${story._id}"
+              required
+            >
+              <option value="">Choose a bunny...</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="edit-content-${story._id}" class="form-label">Your Story</label>
+            <textarea 
+              class="form-control edit-content" 
+              id="edit-content-${story._id}" 
+              rows="4"
+              required
+            >${content}</textarea>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-success btn-sm save-btn">Save Changes</button>
+            <button type="button" class="btn btn-secondary btn-sm cancel-btn">Cancel</button>
+          </div>
+        </form>
       </div>
     </div>
   `;
@@ -225,8 +264,35 @@ function addStoryEventListeners(storyElement, storyId) {
     }
   });
 
-  editBtn.addEventListener("click", () => {
+  editBtn.addEventListener("click", async () => {
     editForm.style.display = "block";
+
+    // Populate bunny select dropdown
+    try {
+      const response = await fetch("/api/bunnies/");
+      const data = await response.json();
+      const bunnySelect = editForm.querySelector(".edit-bunny");
+      bunnySelect.innerHTML = '<option value="">Choose a bunny...</option>';
+
+      const currentBunny = storyElement
+        .querySelector(".card-subtitle:nth-child(3)")
+        .textContent.replace("Bunny: ", "");
+
+      data.bunnies.forEach((bunny) => {
+        const option = document.createElement("option");
+        option.value = bunny.name;
+        option.textContent = bunny.name;
+        if (bunny.name === currentBunny) {
+          option.selected = true;
+        }
+        bunnySelect.appendChild(option);
+      });
+    } catch (error) {
+      console.error("Error loading bunnies:", error);
+    }
+
+    // Focus on the username input
+    editForm.querySelector(".edit-username").focus();
   });
 
   cancelBtn.addEventListener("click", () => {
@@ -234,8 +300,15 @@ function addStoryEventListeners(storyElement, storyId) {
   });
 
   saveBtn.addEventListener("click", async () => {
-    const newTitle = editForm.querySelector("input").value;
-    const newContent = editForm.querySelector("textarea").value;
+    const newUserName = editForm.querySelector(".edit-username").value.trim();
+    const newTitle = editForm.querySelector(".edit-title").value.trim();
+    const newBunny = editForm.querySelector(".edit-bunny").value.trim();
+    const newContent = editForm.querySelector(".edit-content").value.trim();
+
+    if (!newUserName || !newTitle || !newBunny || !newContent) {
+      alert("All fields are required.");
+      return;
+    }
 
     try {
       const response = await fetch(`/api/stories/${storyId}/update`, {
@@ -244,18 +317,29 @@ function addStoryEventListeners(storyElement, storyId) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          userName: newUserName,
           title: newTitle,
+          bunnyName: newBunny,
           content: newContent,
         }),
       });
 
       if (response.ok) {
+        // Update all fields in the display
         storyElement.querySelector(".card-title").textContent = newTitle;
+        storyElement.querySelector(".card-subtitle:nth-child(2)").textContent =
+          `By ${newUserName}`;
+        storyElement.querySelector(".card-subtitle:nth-child(3)").textContent =
+          `Bunny: ${newBunny}`;
         storyElement.querySelector(".card-text").textContent = newContent;
         editForm.style.display = "none";
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || "Failed to update story");
       }
     } catch (error) {
       console.error("Error updating story:", error);
+      alert("Failed to update story. Please try again.");
     }
   });
 }

@@ -3,7 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bunny Friends</title>
+    <meta
+      name="description"
+      content="Bunny World - A community for bunny lovers featuring a gallery and stories forum"
+    />
+    <title>Bunny World - Gallery & Stories</title>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
       rel="stylesheet"
@@ -12,45 +16,53 @@
   </head>
   <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg" aria-label="Main navigation">
       <div class="container">
-        <a class="navbar-brand" href="#">Bunny World</a>
+        <a class="navbar-brand" href="/">Bunny World</a>
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <div class="navbar-nav">
+          <nav class="navbar-nav">
             <a
               class="nav-link active"
-              href="#"
+              href="/gallery"
               data-page="gallery"
               id="galleryLink"
+              aria-current="page"
               >Bunny Gallery</a
             >
-            <a class="nav-link" href="#" data-page="forum" id="forumLink"
+            <a class="nav-link" href="/forum" data-page="forum" id="forumLink"
               >Forum</a
             >
-          </div>
+          </nav>
         </div>
       </div>
     </nav>
 
-    <!-- Content Sections -->
-    <div class="container mt-4">
+    <main class="container mt-4">
       <!-- Gallery Section -->
-      <div id="gallerySection" class="row g-4">
+      <section id="gallerySection" class="row g-4" aria-label="Bunny Gallery">
         <!-- Bunny cards will be inserted here -->
-      </div>
+      </section>
 
       <!-- Forum Section -->
-      <div id="forumSection" class="row" style="display: none">
+      <section
+        id="forumSection"
+        class="row"
+        style="display: none"
+        aria-label="Bunny Stories Forum"
+      >
         <div class="col-md-8 mx-auto">
-          <h2 class="mb-4">Bunny Stories Forum</h2>
+          <h1 class="mb-4">Bunny Stories Forum</h1>
 
           <!-- Form for new posts -->
           <form id="postForm" class="card p-3 mb-4">
@@ -62,6 +74,9 @@
                 id="userName"
                 name="userName"
                 required
+                minlength="2"
+                maxlength="50"
+                autocomplete="name"
               />
             </div>
 
@@ -73,6 +88,8 @@
                 id="postTitle"
                 name="postTitle"
                 required
+                minlength="3"
+                maxlength="100"
               />
             </div>
 
@@ -83,9 +100,13 @@
                 id="bunnySelect"
                 name="bunnySelect"
                 required
+                aria-describedby="bunnySelectHelp"
               >
                 <option value="">Choose a bunny...</option>
               </select>
+              <div id="bunnySelectHelp" class="form-text">
+                Select the bunny your story is about
+              </div>
             </div>
 
             <div class="mb-3">
@@ -96,17 +117,25 @@
                 name="postContent"
                 rows="4"
                 required
+                minlength="10"
+                maxlength="2000"
+                aria-describedby="postContentHelp"
               ></textarea>
+              <div id="postContentHelp" class="form-text">
+                Share your bunny story (10-2000 characters)
+              </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Post Story</button>
+            <button type="submit" class="btn btn-primary" id="submitStory">
+              Post Story
+            </button>
           </form>
 
           <!-- Container for existing posts -->
-          <div id="postsContainer"></div>
+          <div id="postsContainer" aria-live="polite"></div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <script src="./js/client.js" type="module"></script>
