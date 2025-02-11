@@ -37,7 +37,8 @@ Git clone this repository to your local repository.
 
 #### Step 3
 
-Change the contents of .env.example file into your credentials and save it as .env.
+Update the contents of .env.example file into your MongoDB Atlas credentials and save it as .env.
+If using MongoDB locally instead of MongoDB Atlas, use mongodb://localhost:27017 as MONGODB_URI.
 
 #### Step 4
 
