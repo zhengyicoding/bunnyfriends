@@ -56,14 +56,19 @@ Run `npm start` to start your local server. Open your browser and input `http://
 
 ## Screenshots:
 
+### Index page: show Bunny Gallery section
 <img width="1448" alt="image" src="https://github.com/user-attachments/assets/efc1e09e-94e4-42a6-a94f-5fa1e2ea97aa" />
 
+### Show Forum section
 <img width="1447" alt="image" src="https://github.com/user-attachments/assets/6b420351-0e35-4d00-bb96-180678aef60d" />
 
+### Create story post
 <img width="1436" alt="image" src="https://github.com/user-attachments/assets/079e4261-3d2d-43ff-8eff-5a7033f3b9f7" />
 
+### Edit story post
 <img width="1428" alt="image" src="https://github.com/user-attachments/assets/d012f9f5-4cc6-4ecf-aeb2-976e121a89e5" />
 
+### Delete story post
 <img width="1370" alt="image" src="https://github.com/user-attachments/assets/76806444-dfa8-4eb7-8405-e027cffb9c52" />
 
 
