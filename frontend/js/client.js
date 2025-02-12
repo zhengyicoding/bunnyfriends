@@ -17,13 +17,23 @@ async function showPage(page) {
   const gallerySection = document.getElementById("gallerySection");
   const forumSection = document.getElementById("forumSection");
 
+  // Reset both sections
+  [gallerySection, forumSection].forEach((section) => {
+    section.classList.add("section-hidden");
+    section.classList.remove("section-visible");
+  });
+
   if (page === "gallery") {
-    gallerySection.style.display = "flex";
-    forumSection.style.display = "none";
+    requestAnimationFrame(() => {
+      gallerySection.classList.remove("section-hidden");
+      gallerySection.classList.add("section-visible");
+    });
     await createBunnyCards(); // Reload gallery content
   } else if (page === "forum") {
-    gallerySection.style.display = "none";
-    forumSection.style.display = "block";
+    requestAnimationFrame(() => {
+      forumSection.classList.remove("section-hidden");
+      forumSection.classList.add("section-visible");
+    });
     await loadBunnies(); // Reload bunnies for select
     await loadStories(); // Reload stories
   }
@@ -143,7 +153,7 @@ function createStoryElement(story) {
         <button class="btn btn-warning btn-sm edit-btn">Edit</button>
         <button class="btn btn-danger btn-sm delete-btn">Delete</button>
       </div>
-      <div class="edit-form mt-3" style="display:none">
+      <div class="edit-form mt-3">
         <form class="card p-3 bg-light">
           <div class="mb-3">
             <label for="edit-username-${story._id}" class="form-label">Your Name</label>
@@ -265,7 +275,7 @@ function addStoryEventListeners(storyElement, storyId) {
   });
 
   editBtn.addEventListener("click", async () => {
-    editForm.style.display = "block";
+    editForm.classList.add("show");
 
     // Populate bunny select dropdown
     try {
@@ -296,7 +306,7 @@ function addStoryEventListeners(storyElement, storyId) {
   });
 
   cancelBtn.addEventListener("click", () => {
-    editForm.style.display = "none";
+    editForm.classList.remove("show");
   });
 
   saveBtn.addEventListener("click", async () => {
@@ -332,7 +342,7 @@ function addStoryEventListeners(storyElement, storyId) {
         storyElement.querySelector(".card-subtitle:nth-child(3)").textContent =
           `Bunny: ${newBunny}`;
         storyElement.querySelector(".card-text").textContent = newContent;
-        editForm.style.display = "none";
+        editForm.classList.remove("show");
       } else {
         const errorData = await response.json();
         alert(errorData.error || "Failed to update story");

@@ -5,9 +5,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    console.log("GET bunnies");
     const bunnies = await bunnyCol.getBunnies({});
-    console.log("Bunnies fetched");
     res.status(200).json({ bunnies: bunnies });
   } catch (error) {
     console.error("GET api/bunnies error", error);

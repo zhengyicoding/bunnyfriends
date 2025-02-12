@@ -36,6 +36,17 @@
     color: var(--bs-navbar-active-color);
 }
 
+.section-hidden {
+    display: none;
+}
+
+.section-visible {
+    display: block;
+}
+
+#gallerySection.section-visible {
+    display: flex;
+}
 
 .bunny-card {
     border: 2px solid #FFD1DC;
@@ -75,4 +86,26 @@
     height: 100%;
     object-fit: contain;
     padding: 1rem;
+}
+
+.edit-form {
+    display: none;
+}
+
+.edit-form.show {
+    display: block;
+}
+
+/* Control section visibility */
+.row.section-hidden {
+    display: none;
+}
+
+.row.section-visible {
+    display: block;
+}
+
+/* Specific rule for gallery section */
+#gallerySection.row.section-visible {
+    display: flex;
 }
