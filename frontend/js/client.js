@@ -130,8 +130,12 @@ function createStoryElement(story) {
     return null;
   }
 
+  // Create column wrapper for the story card
+  const columnWrapper = document.createElement("div");
+  columnWrapper.className = "col-md-6"; // Makes it take up half the row on medium screens and larger
+
   const storyElement = document.createElement("div");
-  storyElement.className = "card mb-3";
+  storyElement.className = "card h-100"; // Added h-100 to make cards in the same row equal height
   storyElement.setAttribute("data-story-id", story._id || "");
 
   const title = story?.title ?? "Untitled";
@@ -143,15 +147,17 @@ function createStoryElement(story) {
     : "Just now";
 
   storyElement.innerHTML = `
-    <div class="card-body">
+    <div class="card-body d-flex flex-column">
       <h5 class="card-title">${title}</h5>
       <h6 class="card-subtitle mb-2 text-muted">By ${userName}</h6>
       <h6 class="card-subtitle mb-2 text-muted">Bunny: ${bunnyName}</h6>
-      <p class="card-text">${content}</p>
-      <small class="text-muted">Posted ${createdAt}</small>
-      <div class="mt-3">
-        <button class="btn btn-warning btn-sm edit-btn">Edit</button>
-        <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+      <p class="card-text flex-grow-1">${content}</p>
+      <div class="mt-auto">
+        <small class="text-muted d-block mb-2">Posted ${createdAt}</small>
+        <div class="d-flex gap-2">
+          <button class="btn btn-warning btn-sm edit-btn">Edit</button>
+          <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+        </div>
       </div>
       <div class="edit-form mt-3">
         <form class="card p-3 bg-light">
@@ -204,7 +210,8 @@ function createStoryElement(story) {
   `;
 
   addStoryEventListeners(storyElement, story._id);
-  return storyElement;
+  columnWrapper.appendChild(storyElement);
+  return columnWrapper;
 }
 
 document.getElementById("postForm").addEventListener("submit", async (e) => {

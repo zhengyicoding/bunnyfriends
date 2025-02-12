@@ -68,7 +68,8 @@
         class="row section-hidden"
         aria-label="Bunny Stories Forum"
       >
-        <div class="col-md-8 mx-auto">
+        <!-- Form Container - Full Width -->
+        <div class="col-12 mb-4">
           <h1 class="mb-4">Bunny Stories Forum</h1>
 
           <!-- Form for new posts -->
@@ -137,9 +138,11 @@
               Post Story
             </button>
           </form>
+        </div>
 
-          <!-- Container for existing posts -->
-          <div id="postsContainer" aria-live="polite"></div>
+        <!-- Posts Container - Row with 2 columns -->
+        <div class="col-12">
+          <div id="postsContainer" class="row g-4" aria-live="polite"></div>
         </div>
       </section>
     </main>
