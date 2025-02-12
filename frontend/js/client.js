@@ -116,14 +116,24 @@ async function loadStories() {
     const storiesContainer = document.getElementById("postsContainer");
     storiesContainer.innerHTML = "";
 
+    // Create a row container for the 2-column layout
+    const row = document.createElement("div");
+    row.className = "row g-4";
+
     stories.forEach((story) => {
       const storyElement = createStoryElement(story);
-      storiesContainer.appendChild(storyElement);
+      if (storyElement) {
+        row.appendChild(storyElement);
+      }
     });
+
+    // Append the row to the stories container
+    storiesContainer.appendChild(row);
   } catch (error) {
     console.error("Error loading stories:", error);
   }
 }
+
 function createStoryElement(story) {
   if (!story) {
     console.error("No story data provided to createStoryElement");
@@ -273,7 +283,7 @@ function addStoryEventListeners(storyElement, storyId) {
           method: "POST",
         });
         if (response.ok) {
-          storyElement.remove();
+          await loadStories();
         }
       } catch (error) {
         console.error("Error deleting story:", error);
@@ -282,18 +292,27 @@ function addStoryEventListeners(storyElement, storyId) {
   });
 
   editBtn.addEventListener("click", async () => {
-    editForm.classList.add("show");
+    // Show the edit form
+    editForm.style.display = "block";
 
-    // Populate bunny select dropdown
+    // Get current bunny name from the story card
+    const currentBunny = storyElement
+      .querySelector(".card-subtitle:nth-child(3)")
+      .textContent.replace("Bunny: ", "")
+      .trim();
+
+    // Load and populate bunny select options
     try {
       const response = await fetch("/api/bunnies/");
       const data = await response.json();
+
+      if (!data.bunnies || !Array.isArray(data.bunnies)) {
+        console.error("Invalid bunnies data received:", data);
+        return;
+      }
+
       const bunnySelect = editForm.querySelector(".edit-bunny");
       bunnySelect.innerHTML = '<option value="">Choose a bunny...</option>';
-
-      const currentBunny = storyElement
-        .querySelector(".card-subtitle:nth-child(3)")
-        .textContent.replace("Bunny: ", "");
 
       data.bunnies.forEach((bunny) => {
         const option = document.createElement("option");
@@ -304,16 +323,21 @@ function addStoryEventListeners(storyElement, storyId) {
         }
         bunnySelect.appendChild(option);
       });
+
+      console.log("Current bunny:", currentBunny); // Debug log
+      console.log("Number of options added:", data.bunnies.length); // Debug log
     } catch (error) {
-      console.error("Error loading bunnies:", error);
+      console.error("Error loading bunnies for edit form:", error);
     }
 
-    // Focus on the username input
+    // Show the form and focus on username input
+    editForm.classList.add("show");
     editForm.querySelector(".edit-username").focus();
   });
 
   cancelBtn.addEventListener("click", () => {
     editForm.classList.remove("show");
+    editForm.style.display = "none";
   });
 
   saveBtn.addEventListener("click", async () => {
@@ -349,7 +373,10 @@ function addStoryEventListeners(storyElement, storyId) {
         storyElement.querySelector(".card-subtitle:nth-child(3)").textContent =
           `Bunny: ${newBunny}`;
         storyElement.querySelector(".card-text").textContent = newContent;
+
+        // Hide the edit form
         editForm.classList.remove("show");
+        editForm.style.display = "none";
       } else {
         const errorData = await response.json();
         alert(errorData.error || "Failed to update story");
@@ -360,7 +387,6 @@ function addStoryEventListeners(storyElement, storyId) {
     }
   });
 }
-
 // Initialize
 document.addEventListener("DOMContentLoaded", async () => {
   // Show gallery by default
