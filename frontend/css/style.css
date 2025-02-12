@@ -18,6 +18,24 @@
     align-items: center;
 }
 
+.navbar-nav .btn-link {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: none;
+    color: inherit;
+    text-decoration: none;
+}
+
+.navbar-nav .btn-link:hover,
+.navbar-nav .btn-link:focus {
+    color: inherit;
+    text-decoration: none;
+}
+
+.navbar-nav .btn-link.active {
+    color: var(--bs-navbar-active-color);
+}
+
 
 .bunny-card {
     border: 2px solid #FFD1DC;
