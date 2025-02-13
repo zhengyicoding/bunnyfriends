@@ -85,36 +85,28 @@ async function createBunnyCards() {
 
 // Handle forum part
 async function loadBunnies() {
-  try {
-    const response = await fetch("/api/bunnies/");
-    const data = await response.json();
+  const bunnies = await fetchBunnies();
+  const select = document.getElementById("bunnySelect");
 
-    const select = document.getElementById("bunnySelect");
-
-    if (!select) {
-      console.error("Could not find bunnySelect element");
-      return;
-    }
-
-    select.innerHTML = '<option value="">Choose a bunny...</option>';
-
-    data.bunnies.forEach((bunny) => {
-      const option = document.createElement("option");
-      option.value = bunny.name;
-      option.textContent = bunny.name;
-      select.appendChild(option);
-    });
-  } catch (error) {
-    console.error("Error loading bunnies:", error);
+  if (!select) {
+    console.error("Could not find bunnySelect element");
+    return;
   }
+
+  select.innerHTML = '<option value="">Choose a bunny...</option>';
+
+  bunnies.forEach((bunny) => {
+    const option = document.createElement("option");
+    option.value = bunny.name;
+    option.textContent = bunny.name;
+    select.appendChild(option);
+  });
 }
 // load and render stories in the database on the forum page
 async function loadStories() {
-  console.log("Loading stories..."); // Debug log
   try {
     const response = await fetch("/api/stories");
     const stories = await response.json();
-    console.log("Stories fetched:", stories); // Debug log
 
     const storiesContainer = document.getElementById("postsContainer");
     storiesContainer.innerHTML = "";
