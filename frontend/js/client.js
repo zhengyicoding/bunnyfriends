@@ -20,7 +20,6 @@ async function showPage(page) {
   const gallerySection = document.getElementById("gallerySection");
   const forumSection = document.getElementById("forumSection");
 
-  // Reset both sections
   [gallerySection, forumSection].forEach((section) => {
     section.classList.add("section-hidden");
     section.classList.remove("section-visible");
@@ -31,15 +30,76 @@ async function showPage(page) {
       gallerySection.classList.remove("section-hidden");
       gallerySection.classList.add("section-visible");
     });
-    await createBunnyCards(); // Reload gallery content
+    await createBunnyCards();
   } else if (page === "forum") {
     requestAnimationFrame(() => {
       forumSection.classList.remove("section-hidden");
       forumSection.classList.add("section-visible");
     });
-    await loadBunnies(); // Reload bunnies for select
-    await loadStories(); // Reload stories
+    await loadBunnies();
+    await createBunnyFilters(); // Add this line
+    await loadStories();
   }
+}
+
+// Global variable to store current filter
+let currentBunnyFilter = null;
+
+// Function to create bunny filter tags
+async function createBunnyFilters() {
+  const bunnies = await fetchBunnies();
+  const filterContainer = document.getElementById("bunnyFilterContainer");
+
+  // Clear existing filters
+  filterContainer.innerHTML = "";
+
+  // Add "All" filter
+  const allTag = document.createElement("button");
+  allTag.className = "btn btn-sm bunny-tag active";
+  allTag.textContent = "All";
+  allTag.addEventListener("click", () => filterStories(null));
+  filterContainer.appendChild(allTag);
+
+  // Add filter for each bunny
+  bunnies.forEach((bunny) => {
+    const tag = document.createElement("button");
+    tag.className = "btn btn-sm bunny-tag";
+    tag.textContent = bunny.name;
+    tag.addEventListener("click", () => filterStories(bunny.name));
+    filterContainer.appendChild(tag);
+  });
+}
+
+// Function to filter stories
+function filterStories(bunnyName) {
+  currentBunnyFilter = bunnyName;
+
+  // Update active state of filter tags
+  document.querySelectorAll(".bunny-tag").forEach((tag) => {
+    if (
+      (bunnyName === null && tag.textContent === "All") ||
+      tag.textContent === bunnyName
+    ) {
+      tag.classList.add("active");
+    } else {
+      tag.classList.remove("active");
+    }
+  });
+
+  // Filter the stories
+  const stories = document.querySelectorAll("#postsContainer .col-md-6");
+  stories.forEach((story) => {
+    const storyBunny = story
+      .querySelector(".card-subtitle:nth-child(3)")
+      .textContent.replace("Bunny: ", "")
+      .trim();
+
+    if (bunnyName === null || storyBunny === bunnyName) {
+      story.classList.remove("story-hidden");
+    } else {
+      story.classList.add("story-hidden");
+    }
+  });
 }
 
 // Fetch and create bunny cards
@@ -103,6 +163,7 @@ async function loadBunnies() {
   });
 }
 // load and render stories in the database on the forum page
+// Modify your existing loadStories function to maintain filter state
 async function loadStories() {
   try {
     const response = await fetch("/api/stories");
@@ -111,24 +172,28 @@ async function loadStories() {
     const storiesContainer = document.getElementById("postsContainer");
     storiesContainer.innerHTML = "";
 
-    // Create a row container for the 2-column layout
     const row = document.createElement("div");
     row.className = "row g-4";
 
     stories.forEach((story) => {
       const storyElement = createStoryElement(story);
       if (storyElement) {
+        // Apply current filter if exists
+        if (currentBunnyFilter) {
+          const storyBunny = story.bunnyName;
+          if (storyBunny !== currentBunnyFilter) {
+            storyElement.classList.add("story-hidden");
+          }
+        }
         row.appendChild(storyElement);
       }
     });
 
-    // Append the row to the stories container
     storiesContainer.appendChild(row);
   } catch (error) {
     console.error("Error loading stories:", error);
   }
 }
-
 function createStoryElement(story) {
   if (!story) {
     console.error("No story data provided to createStoryElement");

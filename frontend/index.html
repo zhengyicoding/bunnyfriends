@@ -68,17 +68,15 @@
         class="row section-hidden"
         aria-label="Bunny Stories Forum"
       >
-        <!-- Form Container - Full Width -->
-        <div class="col-12 mb-4">
-          <h1 class="mb-4">Bunny Stories Forum</h1>
-
-          <!-- Form for new posts -->
-          <form id="postForm" class="card p-3 mb-4">
-            <div class="mb-3 row align-items-center">
-              <label for="userName" class="col-sm-2 col-form-label"
-                >Your Name</label
-              >
-              <div class="col-sm-10">
+        <div class="row">
+          <!-- Create New Story Form -->
+          <div class="col-md-4 mb-4">
+            <h6 class="mb-3">Create a New Story</h6>
+            <form id="postForm" class="card p-3 mb-2">
+              <div class="mb-2">
+                <label for="userName" class="form-label d-block"
+                  >Your Name</label
+                >
                 <input
                   type="text"
                   class="form-control"
@@ -90,13 +88,11 @@
                   autocomplete="name"
                 />
               </div>
-            </div>
 
-            <div class="mb-3 row align-items-center">
-              <label for="postTitle" class="col-sm-2 col-form-label"
-                >Story Title</label
-              >
-              <div class="col-sm-10">
+              <div class="mb-3">
+                <label for="postTitle" class="form-label d-block"
+                  >Story Title</label
+                >
                 <input
                   type="text"
                   class="form-control"
@@ -107,13 +103,11 @@
                   maxlength="100"
                 />
               </div>
-            </div>
 
-            <div class="mb-3 row align-items-center">
-              <label for="bunnySelect" class="col-sm-2 col-form-label"
-                >Select Bunny</label
-              >
-              <div class="col-sm-10">
+              <div class="mb-3">
+                <label for="bunnySelect" class="form-label d-block"
+                  >Select Bunny</label
+                >
                 <select
                   class="form-control"
                   id="bunnySelect"
@@ -127,18 +121,16 @@
                   Select the bunny your story is about
                 </div>
               </div>
-            </div>
 
-            <div class="mb-3 row">
-              <label for="postContent" class="col-sm-2 col-form-label"
-                >Your Story</label
-              >
-              <div class="col-sm-10">
+              <div class="mb-3">
+                <label for="postContent" class="form-label d-block"
+                  >Your Story</label
+                >
                 <textarea
                   class="form-control"
                   id="postContent"
                   name="postContent"
-                  rows="4"
+                  rows="5"
                   required
                   minlength="10"
                   maxlength="2000"
@@ -148,19 +140,27 @@
                   Share your bunny story (10-2000 characters)
                 </div>
               </div>
-            </div>
 
-            <div class="row">
-              <div class="col-sm-10 offset-sm-2">
-                <button type="submit" class="btn btn-primary" id="submitStory">
-                  Post Story
-                </button>
-              </div>
+              <button
+                type="submit"
+                class="btn btn-primary w-100"
+                id="submitStory"
+              >
+                Post Story
+              </button>
+            </form>
+          </div>
+
+          <!-- Bunny Name Filter Tags Column -->
+          <div class="col-md-8 mb-2">
+            <h6 class="card-title mb-3">Filter Stories by Bunny Name</h6>
+            <div id="bunnyFilterContainer" class="d-flex flex-wrap gap-2">
+              <!-- Bunny filter tags will be inserted here -->
             </div>
-          </form>
+          </div>
         </div>
 
-        <!-- Posts Container - Row with 2 columns -->
+        <!-- Posts Container -->
         <div class="col-12">
           <div id="postsContainer" class="row g-4" aria-live="polite"></div>
         </div>

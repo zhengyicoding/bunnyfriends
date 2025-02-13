@@ -169,3 +169,23 @@
 #postsContainer .card-body {
     padding: 1rem;
 }
+
+.bunny-tag {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #FFD1DC;
+    border: 1px solid #FFB6C1;
+}
+
+.bunny-tag:hover {
+    background-color: #FFB6C1;
+}
+
+.bunny-tag.active {
+    background-color: #FF69B4;
+    color: white;
+}
+
+.story-hidden {
+    display: none !important;
+}
