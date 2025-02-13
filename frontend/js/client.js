@@ -2,14 +2,17 @@
 document.querySelectorAll(".nav-link").forEach((link) => {
   link.addEventListener("click", async (e) => {
     e.preventDefault();
-    const page = e.target.getAttribute("data-page");
-    await showPage(page);
+    const button = e.target.closest(".nav-link");
+    const page = button.getAttribute("data-page");
 
-    // Update active state
+    // Update active state immediately
     document
       .querySelectorAll(".nav-link")
       .forEach((l) => l.classList.remove("active"));
-    e.target.classList.add("active");
+    button.classList.add("active");
+
+    // Then load the page content
+    await showPage(page);
   });
 });
 

@@ -22,18 +22,40 @@
     padding: 0.5rem 1rem;
     border: none;
     background: none;
-    color: inherit;
+    color: #ff69b4;
+    /* Match your existing pink color */
     text-decoration: none;
+    position: relative;
+    /* For the underline effect */
 }
 
 .navbar-nav .btn-link:hover,
 .navbar-nav .btn-link:focus {
-    color: inherit;
+    color: #ff69b4;
     text-decoration: none;
 }
 
 .navbar-nav .btn-link.active {
-    color: var(--bs-navbar-active-color);
+    color: #fff;
+    /* White text for better visibility */
+    font-weight: bold;
+    /* Make active text bold */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    /* Stronger text shadow for active state */
+}
+
+/* Add underline effect for active state */
+.navbar-nav .btn-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0.5rem;
+    right: 0.5rem;
+    height: 2px;
+    background-color: #fff;
+    /* White underline */
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+    /* Glow effect */
 }
 
 .section-hidden {

@@ -29,7 +29,7 @@ Prompt: I want to only have 1 index page but show different contents through cli
 
 ### Option 1: Live Demo
 
-[Bunny Friends Forum](https://bunnyfriends-7aibi0xdt-zhengyis-projects.vercel.app/)
+[Bunny Friends Forum](https://bunnyfriends-m2x8oibt5-zhengyis-projects.vercel.app)
 
 ### Option 2: Run locally
 
