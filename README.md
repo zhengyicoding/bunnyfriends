@@ -55,9 +55,10 @@ Currently there is no user authentication and authorisation mechanism in place s
 
 <img width="1447" alt="image" src="https://github.com/user-attachments/assets/6b420351-0e35-4d00-bb96-180678aef60d" />
 
-### Create story post
+### Create story post & filter story posts by Bunny Name
 
-<img width="1436" alt="image" src="https://github.com/user-attachments/assets/079e4261-3d2d-43ff-8eff-5a7033f3b9f7" />
+<img width="1498" alt="image" src="https://github.com/user-attachments/assets/504cc6da-7f18-4a25-ae2b-b76fb68bb308" />
+
 
 ### Edit story post
 
