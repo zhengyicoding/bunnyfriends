@@ -76,3 +76,5 @@ Prompt: How to set up my .env file to input MongoDB Atlas credentials? Do I need
 ### Use case: frontend representation
 
 Prompt: I want to only have 1 index page but show different contents through clicking on 2 links (1 for bunny gallery and another for forum contents) on the navigation bar, how should I set up the navigation part in my html, css and JS files?
+
+Prompt: I 

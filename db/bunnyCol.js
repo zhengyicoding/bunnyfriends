@@ -7,6 +7,25 @@ function BunnyCol() {
   const COL_NAME = "bunnies";
   const self = {};
 
+  async function ensureIndexes() {
+    const client = new MongoClient(uri);
+    try {
+      await client.connect();
+      const db = client.db(DB_NAME);
+      const collection = db.collection(COL_NAME);
+
+      await collection.createIndex(
+        { name: 1 },
+        { collation: { locale: "en" } }
+      );
+    } catch (error) {
+      console.error("Failed to create indexes", error);
+    }
+  }
+
+  // Call this when initializing the database
+  ensureIndexes();
+
   self.getBunnies = async (query = {}) => {
     const client = new MongoClient(uri);
     try {
