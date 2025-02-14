@@ -47,24 +47,21 @@ Currently there is no user authentication and authorisation mechanism in place s
 
 ## Screenshots:
 
-### Index page: show Bunny Gallery section
+### Index page: show Bunny Gallery section by default
 
-<img width="1448" alt="image" src="https://github.com/user-attachments/assets/efc1e09e-94e4-42a6-a94f-5fa1e2ea97aa" />
+<img width="1467" alt="image" src="https://github.com/user-attachments/assets/6f8fa3eb-ec12-43e6-aded-aacf18120fa8" />
 
-### Show Forum section
 
-<img width="1447" alt="image" src="https://github.com/user-attachments/assets/6b420351-0e35-4d00-bb96-180678aef60d" />
-
-### Create story post & filter story posts by Bunny Name
+### Click on Forum to show forum section - Create story post & filter story posts by Bunny Name
 
 <img width="1498" alt="image" src="https://github.com/user-attachments/assets/504cc6da-7f18-4a25-ae2b-b76fb68bb308" />
 
 
-### Edit story post
+### Forum Section - Update story post
 
 <img width="1428" alt="image" src="https://github.com/user-attachments/assets/d012f9f5-4cc6-4ecf-aeb2-976e121a89e5" />
 
-### Delete story post
+### Forum Section - Delete story post
 
 <img width="1370" alt="image" src="https://github.com/user-attachments/assets/76806444-dfa8-4eb7-8405-e027cffb9c52" />
 
