@@ -86,19 +86,19 @@ Prompt: Please write script for make a json file consisting of 1000 records with
 
 ## Approved project idea:
 
-Project Description
-The Fluffy bunny friends forum is a community platform where Jellycat enthusiasts can share stories, experiences, and photos (tentatively) with their beloved fluffy Jellycat bunnies. Main page will show posts of users and a separate page will show a list of currently on-the-market Jellycat bunnies. CRUD operations are available on the posts.
-CRUD Operations
-Create: Users can post photos, stories and experiences with their Jellycat bunnies
-Read: Users can browse posts ordered by create date
-Update: Users can edit their posts information
-Delete: Users can remove their posts
-User Personas
-Emma (19, College Student) Emma has been collecting Jellycats since childhood and now brings them to her dorm. She uses the forum to connect with other collectors and share dorm decoration ideas.
-"I want to share photos of how I display my Jellycat collection in my small dorm space and get inspiration from others."
-Mark (35, Teacher) Mark uses Jellycats in his elementary classroom and wants to share educational activities involving plush toys.
-"I'd love to exchange ideas with other teachers about using Jellycats for storytelling and emotional learning activities."
-Sarah (28, Work-from-home Professional) Sarah photographs her Jellycats in creative scenes and wants to share her mini stories with fellow enthusiasts.
+Project Description  
+The Fluffy bunny friends forum is a community platform where Jellycat enthusiasts can share stories, experiences, and photos (tentatively) with their beloved fluffy Jellycat bunnies. Main page will show posts of users and a separate page will show a list of currently on-the-market Jellycat bunnies. CRUD operations are available on the posts.  
+CRUD Operations  
+Create: Users can post photos, stories and experiences with their Jellycat bunnies  
+Read: Users can browse posts ordered by create date  
+Update: Users can edit their posts information  
+Delete: Users can remove their posts  
+User Personas  
+Emma (19, College Student) Emma has been collecting Jellycats since childhood and now brings them to her dorm. She uses the forum to connect with other collectors and share dorm decoration ideas.  
+"I want to share photos of how I display my Jellycat collection in my small dorm space and get inspiration from others."  
+Mark (35, Teacher) Mark uses Jellycats in his elementary classroom and wants to share educational activities involving plush toys.  
+"I'd love to exchange ideas with other teachers about using Jellycats for storytelling and emotional learning activities."  
+Sarah (28, Work-from-home Professional) Sarah photographs her Jellycats in creative scenes and wants to share her mini stories with fellow enthusiasts.  
 "I create little adventure scenarios with my Jellycats during breaks and want to share these moments with people who understand."
 
 ## Links:
