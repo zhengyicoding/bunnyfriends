@@ -40,14 +40,14 @@ Run `node ./db/seeder.js` to import data into your database.
 
 #### Step 5
 
-Run `npm start` or run `npm run dev` for developer mode to start your local server.
-Open your browser and input `http://localhost:3000/` and the webpage should show.
-You can click on "Bunny Gallery" to see collections of Jellycat Bunnies and on "Forum" to browse user stories in there and create/edit/delete your own story.
+Run `npm start` or run `npm run dev` for developer mode to start your local server.  
+Open your browser and input `http://localhost:3000/` and the webpage should show.  
+You can click on "Bunny Gallery" to see collections of Jellycat Bunnies and on "Forum" to browse user stories in there and create/edit/delete your own story.  
 Currently there is no user authentication and authorisation mechanism in place so any user can edit/delete any story posts, which is is an important area of improvement to be done in the future.
 
 ## Database:
 
-Collection 1: bunnies, with 52 records of available JellyCat bunnies.
+Collection 1: bunnies, with 52 records of available JellyCat bunnies.  
 Collection 2: stories, with 1,000 records of story posts on the forum.
 
 ## Screenshots:
