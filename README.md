@@ -47,8 +47,8 @@ Currently there is no user authentication and authorisation mechanism in place s
 
 ## Database:
 
-Collection 1: bunnies, with 52 records of available JellyCat bunnies.  
-Collection 2: stories, with 1,000 records of story posts on the forum.
+Collection 1: bunnies, with 52 records of available JellyCat bunnies. Support read on bunnies.
+Collection 2: stories, with 1,000 records of story posts on the forum. Support filter by bunny name and CRUD operations on forum posts.
 
 ## Screenshots:
 
@@ -68,6 +68,14 @@ Collection 2: stories, with 1,000 records of story posts on the forum.
 
 <img width="1370" alt="image" src="https://github.com/user-attachments/assets/76806444-dfa8-4eb7-8405-e027cffb9c52" />
 
+## Links:
+
+[Design Document](https://github.com/zhengyicoding/bunnyfriends/blob/main/proj2_design_doc.pdf)
+
+[Slides](https://docs.google.com/presentation/d/18rOBpBCS3tAUMyN8lWESbDy9P3ZVbvfJfD79cNXqcfg/edit?usp=sharing)
+
+[Video Demo]
+
 ## LLM Usage
 
 Used Claude 3.5 Sonnet for the following use cases and prompts:
@@ -83,6 +91,10 @@ Prompt: I want to only have 1 index page but show different contents through cli
 ### Use case: virtual data creation
 
 Prompt: Please write script for make a json file consisting of 1000 records with below variables: name, story title, bunny name (chose from 52 bunny names in the attached Json file), story content.
+
+### Use case: code refactoring
+
+Prompt: Please help me to move the InnerHTML into a templates folder for bunny cards and forum posts (create new story form and edit form) templates. What functions should I add and how to modify existing client.js functions to use the templates?
 
 ## Approved project idea:
 
@@ -100,11 +112,3 @@ Mark (35, Teacher) Mark uses Jellycats in his elementary classroom and wants to 
 "I'd love to exchange ideas with other teachers about using Jellycats for storytelling and emotional learning activities."  
 Sarah (28, Work-from-home Professional) Sarah photographs her Jellycats in creative scenes and wants to share her mini stories with fellow enthusiasts.  
 "I create little adventure scenarios with my Jellycats during breaks and want to share these moments with people who understand."
-
-## Links:
-
-[Design Document](https://github.com/zhengyicoding/bunnyfriends/blob/main/proj2_design_doc.pdf)
-
-[Slides](https://docs.google.com/presentation/d/18rOBpBCS3tAUMyN8lWESbDy9P3ZVbvfJfD79cNXqcfg/edit?usp=sharing)
-
-[Video Demo]
