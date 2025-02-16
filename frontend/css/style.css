@@ -1,3 +1,4 @@
+/* navbar styles */
 .navbar {
     background-image: url('../img/bunny_banner.jpg');
     background-size: cover;
@@ -58,6 +59,7 @@
     /* Glow effect */
 }
 
+/* Show and hidden effects for gallery and forum sections */
 .section-hidden {
     display: none;
 }
@@ -70,13 +72,19 @@
     display: flex;
 }
 
+/* Specific rule for gallery section */
+#gallerySection.row.section-visible {
+    display: flex;
+}
+
+/* bunny gallery styles */
+
 .bunny-card {
     border: 2px solid #FFD1DC;
     border-radius: 15px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     background-color: #fff;
-    /* Keep white background */
 }
 
 .bunny-card:hover {
@@ -110,6 +118,8 @@
     padding: 1rem;
 }
 
+/* forum section styles */
+
 .edit-form {
     display: none;
 }
@@ -127,10 +137,6 @@
     display: block;
 }
 
-/* Specific rule for gallery section */
-#gallerySection.row.section-visible {
-    display: flex;
-}
 
 /* Reduce main heading size */
 #forumSection h1 {
@@ -170,6 +176,7 @@
     padding: 1rem;
 }
 
+/* Styles for the bunny filter tags */
 .bunny-tag {
     cursor: pointer;
     transition: all 0.3s ease;
@@ -187,5 +194,5 @@
 }
 
 .story-hidden {
-    display: none !important;
+    display: none;
 }

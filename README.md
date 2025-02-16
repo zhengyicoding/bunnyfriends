@@ -5,7 +5,7 @@ A basic forum application to showcase node + express + es6 modules + Mongo8 + aj
 ## Author
 
 Zhengyi Xu
-[Github] (https://github.com/zhengyicoding)
+[Github](https://github.com/zhengyicoding)
 
 ## Class Link
 
@@ -103,6 +103,8 @@ Sarah (28, Work-from-home Professional) Sarah photographs her Jellycats in creat
 
 ## Links:
 
-[Slides] (https://docs.google.com/presentation/d/18rOBpBCS3tAUMyN8lWESbDy9P3ZVbvfJfD79cNXqcfg/edit?usp=sharing)
+[Design Document](https://github.com/zhengyicoding/bunnyfriends/blob/main/proj2_design_doc.pdf)
+
+[Slides](https://docs.google.com/presentation/d/18rOBpBCS3tAUMyN8lWESbDy9P3ZVbvfJfD79cNXqcfg/edit?usp=sharing)
 
 [Video Demo]

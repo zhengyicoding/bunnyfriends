@@ -42,66 +42,6 @@ async function showPage(page) {
   }
 }
 
-// Global variable to store current filter
-let currentBunnyFilter = null;
-
-// Function to create bunny filter tags
-async function createBunnyFilters() {
-  const bunnies = await fetchBunnies();
-  const filterContainer = document.getElementById("bunnyFilterContainer");
-
-  // Clear existing filters
-  filterContainer.innerHTML = "";
-
-  // Add "All" filter
-  const allTag = document.createElement("button");
-  allTag.className = "btn btn-sm bunny-tag active";
-  allTag.textContent = "All";
-  allTag.addEventListener("click", () => filterStories(null));
-  filterContainer.appendChild(allTag);
-
-  // Add filter for each bunny
-  bunnies.forEach((bunny) => {
-    const tag = document.createElement("button");
-    tag.className = "btn btn-sm bunny-tag";
-    tag.textContent = bunny.name;
-    tag.addEventListener("click", () => filterStories(bunny.name));
-    filterContainer.appendChild(tag);
-  });
-}
-
-// Function to filter stories
-function filterStories(bunnyName) {
-  currentBunnyFilter = bunnyName;
-
-  // Update active state of filter tags
-  document.querySelectorAll(".bunny-tag").forEach((tag) => {
-    if (
-      (bunnyName === null && tag.textContent === "All") ||
-      tag.textContent === bunnyName
-    ) {
-      tag.classList.add("active");
-    } else {
-      tag.classList.remove("active");
-    }
-  });
-
-  // Filter the stories
-  const stories = document.querySelectorAll("#postsContainer .col-md-6");
-  stories.forEach((story) => {
-    const storyBunny = story
-      .querySelector(".card-subtitle:nth-child(3)")
-      .textContent.replace("Bunny: ", "")
-      .trim();
-
-    if (bunnyName === null || storyBunny === bunnyName) {
-      story.classList.remove("story-hidden");
-    } else {
-      story.classList.add("story-hidden");
-    }
-  });
-}
-
 // Fetch and create bunny cards
 async function fetchBunnies() {
   try {
@@ -162,8 +102,67 @@ async function loadBunnies() {
     select.appendChild(option);
   });
 }
+
+// Global variable to store current filter
+let currentBunnyFilter = null;
+
+// Function to create bunny filter tags
+async function createBunnyFilters() {
+  const bunnies = await fetchBunnies();
+  const filterContainer = document.getElementById("bunnyFilterContainer");
+
+  // Clear existing filters
+  filterContainer.innerHTML = "";
+
+  // Add "All" filter
+  const allTag = document.createElement("button");
+  allTag.className = "btn btn-sm bunny-tag active";
+  allTag.textContent = "All";
+  allTag.addEventListener("click", () => filterStories(null));
+  filterContainer.appendChild(allTag);
+
+  // Add filter for each bunny
+  bunnies.forEach((bunny) => {
+    const tag = document.createElement("button");
+    tag.className = "btn btn-sm bunny-tag";
+    tag.textContent = bunny.name;
+    tag.addEventListener("click", () => filterStories(bunny.name));
+    filterContainer.appendChild(tag);
+  });
+}
+
+// Function to filter stories
+function filterStories(bunnyName) {
+  currentBunnyFilter = bunnyName;
+
+  // Update active state of filter tags
+  document.querySelectorAll(".bunny-tag").forEach((tag) => {
+    if (
+      (bunnyName === null && tag.textContent === "All") ||
+      tag.textContent === bunnyName
+    ) {
+      tag.classList.add("active");
+    } else {
+      tag.classList.remove("active");
+    }
+  });
+
+  // Filter the stories
+  const stories = document.querySelectorAll("#postsContainer .col-md-6");
+  stories.forEach((story) => {
+    const storyBunny = story
+      .querySelector(".card-subtitle:nth-child(3)")
+      .textContent.replace("Bunny: ", "")
+      .trim();
+
+    if (bunnyName === null || storyBunny === bunnyName) {
+      story.classList.remove("story-hidden");
+    } else {
+      story.classList.add("story-hidden");
+    }
+  });
+}
 // load and render stories in the database on the forum page
-// Modify your existing loadStories function to maintain filter state
 async function loadStories() {
   try {
     const response = await fetch("/api/stories");
