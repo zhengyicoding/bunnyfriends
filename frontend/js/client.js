@@ -286,17 +286,18 @@ function createStoryElement(story) {
 document.getElementById("postForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // Get form elements with validation
-  const userNameInput = document.getElementById("userName");
-  const titleInput = document.getElementById("postTitle");
-  const bunnyInput = document.getElementById("bunnySelect");
-  const contentInput = document.getElementById("postContent");
+  // // Get form elements with validation
+  // const userNameInput = document.getElementById("userName");
+  // const titleInput = document.getElementById("postTitle");
+  // const bunnyInput = document.getElementById("bunnySelect");
+  // const contentInput = document.getElementById("postContent");
 
+  const form = e.target;
   const storyData = {
-    userName: userNameInput.value,
-    title: titleInput.value,
-    bunnyName: bunnyInput.value,
-    content: contentInput.value,
+    userName: form.userName.value,
+    title: form.postTitle.value,
+    bunnyName: form.bunnySelect.value,
+    content: form.postContent.value,
   };
 
   try {
@@ -322,7 +323,7 @@ document.getElementById("postForm").addEventListener("submit", async (e) => {
     await loadStories();
 
     // Clear the form
-    e.target.reset();
+    form.reset();
   } catch (error) {
     console.error("Error creating story:", error);
   }
@@ -383,8 +384,8 @@ function addStoryEventListeners(storyElement, storyId) {
         bunnySelect.appendChild(option);
       });
 
-      console.log("Current bunny:", currentBunny); // Debug log
-      console.log("Number of options added:", data.bunnies.length); // Debug log
+      console.log("Current bunny:", currentBunny);
+      console.log("Number of options added:", data.bunnies.length);
     } catch (error) {
       console.error("Error loading bunnies for edit form:", error);
     }
