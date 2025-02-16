@@ -1,0 +1,29 @@
+.section-hidden {
+    display: none;
+}
+
+.section-visible {
+    display: block;
+}
+
+#gallerySection.section-visible,
+#gallerySection.row.section-visible {
+    display: flex;
+}
+
+.row.section-hidden {
+    display: none;
+}
+
+.row.section-visible {
+    display: block;
+}
+
+#postsContainer .g-4 {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1rem;
+}
+
+.story-hidden {
+    display: none;
+}

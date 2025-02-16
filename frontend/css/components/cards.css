@@ -1,0 +1,18 @@
+.card .btn-primary {
+    background-color: #FFB6C1;
+    border-color: #FFB6C1;
+    color: #fff;
+}
+
+.card .btn-primary:hover {
+    background-color: #FF69B4;
+    border-color: #FF69B4;
+}
+
+#postsContainer .card {
+    font-size: 0.9rem;
+}
+
+#postsContainer .card-body {
+    padding: 1rem;
+}

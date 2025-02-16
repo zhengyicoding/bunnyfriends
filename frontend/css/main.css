@@ -1,0 +1,9 @@
+/* Import all component styles */
+@import 'components/navbar.css';
+@import 'components/gallery.css';
+@import 'components/cards.css';
+@import 'components/forms.css';
+@import 'components/tags.css';
+
+/* Import layout styles */
+@import 'layout.css';

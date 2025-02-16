@@ -1,0 +1,27 @@
+.bunny-card {
+    border: 2px solid #FFD1DC;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+}
+
+.bunny-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+}
+
+.card-img-container {
+    height: 300px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 1rem;
+}

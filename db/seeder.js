@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
-import { bunnydata } from "./bunnydata.js";
-import { storydata } from "./storydata.js";
+import { bunnydata } from "./data/bunnydata.js";
+import { storydata } from "./data/storydata.js";
 import "dotenv/config";
 
 async function importData() {
