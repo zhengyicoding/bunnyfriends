@@ -54,33 +54,41 @@ async function fetchBunnies() {
   }
 }
 
+async function loadTemplate(name) {
+  const response = await fetch(`/templates/${name}`);
+  return await response.text();
+}
+
 async function createBunnyCards() {
   const gallery = document.getElementById("gallerySection");
-  gallery.innerHTML = ""; // Clear existing cards
+  gallery.innerHTML = "";
 
-  const bunnies = await fetchBunnies();
-  bunnies.forEach((bunny) => {
-    const price = parseFloat(bunny.price.replace("$", ""));
-    const card = document.createElement("div");
-    card.className = "col-md-4 mb-4";
-    card.innerHTML = `
-        <div class="card bunny-card h-100">
-          <div class="card-img-container">
-            <img src="${bunny.image}" class="card-img-top" alt="${bunny.name}">
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">${bunny.name}</h5>
-            <p class="card-text">$${price.toFixed(2)}</p>
-                 ${
-                   bunny.link
-                     ? `<a href="${bunny.link}" class="btn btn-primary" target="_blank">View Details</a>`
-                     : ""
-                 }
-          </div>
-        </div>
-      `;
-    gallery.appendChild(card);
-  });
+  try {
+    const [bunnies, template] = await Promise.all([
+      fetchBunnies(),
+      loadTemplate("bunny-card.html"),
+    ]);
+
+    bunnies.forEach((bunny) => {
+      const card = document.createElement("div");
+      card.className = "col-md-4 mb-4";
+
+      let cardHtml = template;
+      const price = parseFloat(bunny.price.replace("$", ""));
+
+      // Replace template variables
+      cardHtml = cardHtml
+        .replace(/\${name}/g, bunny.name)
+        .replace(/\${image}/g, bunny.image)
+        .replace(/\${price}/g, price.toFixed(2))
+        .replace(/\${link}/g, bunny.link || "");
+
+      card.innerHTML = cardHtml;
+      gallery.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Error creating bunny cards:", error);
+  }
 }
 
 // Handle forum part
@@ -164,7 +172,6 @@ function filterStories(bunnyName) {
     }
   });
 }
-// load and render stories in the database on the forum page
 async function loadStories() {
   try {
     const response = await fetch("/api/stories");
@@ -176,10 +183,9 @@ async function loadStories() {
     const row = document.createElement("div");
     row.className = "row g-4";
 
-    stories.forEach((story) => {
-      const storyElement = createStoryElement(story);
+    stories.forEach(async (story) => {
+      const storyElement = await createStoryElement(story); // Wait for element creation
       if (storyElement) {
-        // Apply current filter if exists
         if (currentBunnyFilter) {
           const storyBunny = story.bunnyName;
           if (storyBunny !== currentBunnyFilter) {
@@ -195,95 +201,143 @@ async function loadStories() {
     console.error("Error loading stories:", error);
   }
 }
-function createStoryElement(story) {
+async function createStoryElement(story) {
   if (!story) {
     console.error("No story data provided to createStoryElement");
     return null;
   }
 
-  // Create column wrapper for the story card
-  const columnWrapper = document.createElement("div");
-  columnWrapper.className = "col-md-6"; // Makes it take up half the row on medium screens and larger
+  try {
+    // Fetch template
+    const template = await loadTemplate("story-card.html");
 
-  const storyElement = document.createElement("div");
-  storyElement.className = "card h-100"; // Added h-100 to make cards in the same row equal height
-  storyElement.setAttribute("data-story-id", story._id || "");
+    // Create column wrapper for the story card
+    const columnWrapper = document.createElement("div");
+    columnWrapper.className = "col-md-6";
 
-  const title = story?.title ?? "Untitled";
-  const userName = story?.userName ?? "Anonymous";
-  const bunnyName = story?.bunnyName ?? "Not specified";
-  const content = story?.content ?? "";
-  const createdAt = story?.createdAt
-    ? new Date(story.createdAt).toLocaleDateString()
-    : "Just now";
+    const storyElement = document.createElement("div");
+    storyElement.className = "card h-100";
+    storyElement.setAttribute("data-story-id", story._id || "");
 
-  storyElement.innerHTML = `
-    <div class="card-body d-flex flex-column">
-      <h5 class="card-title">${title}</h5>
-      <h6 class="card-subtitle mb-2 text-muted">By ${userName}</h6>
-      <h6 class="card-subtitle mb-2 text-muted">Bunny: ${bunnyName}</h6>
-      <p class="card-text flex-grow-1">${content}</p>
-      <div class="mt-auto">
-        <small class="text-muted d-block mb-2">Posted ${createdAt}</small>
-        <div class="d-flex gap-2">
-          <button class="btn btn-warning btn-sm edit-btn">Edit</button>
-          <button class="btn btn-danger btn-sm delete-btn">Delete</button>
-        </div>
-      </div>
-      <div class="edit-form mt-3">
-        <form class="card p-3 bg-light" name="editForm">
-          <div class="mb-3">
-            <label for="edit-username-${story._id}" class="form-label">Your Name</label>
-            <input 
-              name="userName"
-              type="text" 
-              class="form-control" 
-              value="${userName}"
-              required
-            >
-          </div>
-          <div class="mb-3">
-            <label for="edit-title-${story._id}" class="form-label">Story Title</label>
-            <input 
-              name="title"
-              type="text" 
-              class="form-control" 
-              value="${title}"
-              required
-            >
-          </div>
-          <div class="mb-3">
-            <label for="edit-bunny-${story._id}" class="form-label">Select Bunny</label>
-            <select 
-              name="bunnyName"
-              class="form-control" 
-              required
-            >
-              <option value="">Choose a bunny...</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="edit-content-${story._id}" class="form-label">Your Story</label>
-            <textarea 
-              name="content"
-              class="form-control" 
-              rows="4"
-              required
-            >${content}</textarea>
-          </div>
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-success btn-sm save-btn">Save Changes</button>
-            <button type="button" class="btn btn-secondary btn-sm cancel-btn">Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-`;
+    // Prepare data for template
+    const data = {
+      title: story?.title ?? "Untitled",
+      userName: story?.userName ?? "Anonymous",
+      bunnyName: story?.bunnyName ?? "Not specified",
+      content: story?.content ?? "",
+      createdAt: story?.createdAt
+        ? new Date(story.createdAt).toLocaleDateString()
+        : "Just now",
+      storyId: story._id || "",
+    };
 
-  addStoryEventListeners(storyElement, story._id);
-  columnWrapper.appendChild(storyElement);
-  return columnWrapper;
+    // Replace all placeholders in template
+    let html = template;
+    Object.keys(data).forEach((key) => {
+      const regex = new RegExp(`\\$\\{${key}\\}`, "g");
+      html = html.replace(regex, data[key]);
+    });
+
+    storyElement.innerHTML = html;
+
+    // Add event listeners
+    const deleteBtn = storyElement.querySelector(".delete-btn");
+    const editBtn = storyElement.querySelector(".edit-btn");
+    const editForm = storyElement.querySelector(".edit-form");
+    const saveBtn = storyElement.querySelector(".save-btn");
+
+    deleteBtn.addEventListener("click", async () => {
+      if (confirm("Delete this story?")) {
+        try {
+          const response = await fetch(`/api/stories/${story._id}/delete`, {
+            method: "POST",
+          });
+          if (response.ok) {
+            await loadStories();
+          }
+        } catch (error) {
+          console.error("Error deleting story:", error);
+        }
+      }
+    });
+
+    editBtn.addEventListener("click", async () => {
+      editForm.style.display = "block";
+
+      const currentBunny = storyElement
+        .querySelector(".card-subtitle:nth-child(3)")
+        .textContent.replace("Bunny: ", "")
+        .trim();
+
+      // Get the form and bunny select by name
+      const form = editForm.querySelector("form");
+      await loadBunnies(form.bunnyName, currentBunny);
+
+      const cancelBtn = editForm.querySelector(".cancel-btn");
+      cancelBtn.onclick = () => {
+        editForm.classList.remove("show");
+        editForm.style.display = "none";
+      };
+
+      editForm.classList.add("show");
+      form.userName.focus();
+    });
+
+    saveBtn.addEventListener("click", async () => {
+      const form = editForm.querySelector("form");
+      const formData = {
+        userName: form.userName.value.trim(),
+        title: form.title.value.trim(),
+        bunnyName: form.bunnyName.value.trim(),
+        content: form.content.value.trim(),
+      };
+
+      if (Object.values(formData).some((value) => !value)) {
+        alert("All fields are required.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/stories/${story._id}/update`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          // Update display
+          storyElement.querySelector(".card-title").textContent =
+            formData.title;
+          storyElement.querySelector(
+            ".card-subtitle:nth-child(2)"
+          ).textContent = `By ${formData.userName}`;
+          storyElement.querySelector(
+            ".card-subtitle:nth-child(3)"
+          ).textContent = `Bunny: ${formData.bunnyName}`;
+          storyElement.querySelector(".card-text").textContent =
+            formData.content;
+
+          // Hide form
+          editForm.classList.remove("show");
+          editForm.style.display = "none";
+        } else {
+          const errorData = await response.json();
+          alert(errorData.error || "Failed to update story");
+        }
+      } catch (error) {
+        console.error("Error updating story:", error);
+        alert("Failed to update story. Please try again.");
+      }
+    });
+
+    columnWrapper.appendChild(storyElement);
+    return columnWrapper;
+  } catch (error) {
+    console.error("Error creating story element:", error);
+    return null;
+  }
 }
+// Handle form submission
 
 document.getElementById("postForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -325,92 +379,6 @@ document.getElementById("postForm").addEventListener("submit", async (e) => {
   }
 });
 
-function addStoryEventListeners(storyElement, storyId) {
-  const deleteBtn = storyElement.querySelector(".delete-btn");
-  const editBtn = storyElement.querySelector(".edit-btn");
-  const editForm = storyElement.querySelector(".edit-form");
-  const saveBtn = storyElement.querySelector(".save-btn");
-
-  deleteBtn.addEventListener("click", async () => {
-    if (confirm("Delete this story?")) {
-      try {
-        const response = await fetch(`/api/stories/${storyId}/delete`, {
-          method: "POST",
-        });
-        if (response.ok) {
-          await loadStories();
-        }
-      } catch (error) {
-        console.error("Error deleting story:", error);
-      }
-    }
-  });
-
-  editBtn.addEventListener("click", async () => {
-    editForm.style.display = "block";
-
-    const currentBunny = storyElement
-      .querySelector(".card-subtitle:nth-child(3)")
-      .textContent.replace("Bunny: ", "")
-      .trim();
-
-    // Get the form and bunny select by name
-    const form = editForm.querySelector("form");
-    await loadBunnies(form.bunnyName, currentBunny);
-
-    const cancelBtn = editForm.querySelector(".cancel-btn");
-    cancelBtn.onclick = () => {
-      editForm.classList.remove("show");
-      editForm.style.display = "none";
-    };
-
-    editForm.classList.add("show");
-    form.userName.focus();
-  });
-
-  saveBtn.addEventListener("click", async () => {
-    const form = editForm.querySelector("form");
-    const formData = {
-      userName: form.userName.value.trim(),
-      title: form.title.value.trim(),
-      bunnyName: form.bunnyName.value.trim(),
-      content: form.content.value.trim(),
-    };
-
-    if (Object.values(formData).some((value) => !value)) {
-      alert("All fields are required.");
-      return;
-    }
-
-    try {
-      const response = await fetch(`/api/stories/${storyId}/update`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        // Update display
-        storyElement.querySelector(".card-title").textContent = formData.title;
-        storyElement.querySelector(".card-subtitle:nth-child(2)").textContent =
-          `By ${formData.userName}`;
-        storyElement.querySelector(".card-subtitle:nth-child(3)").textContent =
-          `Bunny: ${formData.bunnyName}`;
-        storyElement.querySelector(".card-text").textContent = formData.content;
-
-        // Hide form
-        editForm.classList.remove("show");
-        editForm.style.display = "none";
-      } else {
-        const errorData = await response.json();
-        alert(errorData.error || "Failed to update story");
-      }
-    } catch (error) {
-      console.error("Error updating story:", error);
-      alert("Failed to update story. Please try again.");
-    }
-  });
-}
 // Initialize
 document.addEventListener("DOMContentLoaded", async () => {
   // Show gallery by default

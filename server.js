@@ -16,6 +16,17 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "index.html"));
 });
 
+app.get("/templates/:name", (req, res) => {
+  const templateName = req.params.name;
+  const templatePath = path.join(
+    __dirname,
+    "frontend",
+    "templates",
+    templateName
+  );
+  res.sendFile(templatePath);
+});
+
 // 1. Essential middleware first
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
