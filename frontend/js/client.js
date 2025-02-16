@@ -36,8 +36,8 @@ async function showPage(page) {
       forumSection.classList.remove("section-hidden");
       forumSection.classList.add("section-visible");
     });
-    await loadBunnies();
-    await createBunnyFilters(); // Add this line
+    await loadBunnies(document.getElementById("bunnySelect"));
+    await createBunnyFilters();
     await loadStories();
   }
 }
@@ -84,22 +84,24 @@ async function createBunnyCards() {
 }
 
 // Handle forum part
-async function loadBunnies() {
+async function loadBunnies(selectElement, currentBunny = null) {
   const bunnies = await fetchBunnies();
-  const select = document.getElementById("bunnySelect");
 
-  if (!select) {
-    console.error("Could not find bunnySelect element");
+  if (!selectElement) {
+    console.error("No select element provided");
     return;
   }
 
-  select.innerHTML = '<option value="">Choose a bunny...</option>';
+  selectElement.innerHTML = '<option value="">Choose a bunny...</option>';
 
   bunnies.forEach((bunny) => {
     const option = document.createElement("option");
     option.value = bunny.name;
     option.textContent = bunny.name;
-    select.appendChild(option);
+    if (currentBunny && bunny.name === currentBunny) {
+      option.selected = true;
+    }
+    selectElement.appendChild(option);
   });
 }
 
@@ -286,12 +288,6 @@ function createStoryElement(story) {
 document.getElementById("postForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // // Get form elements with validation
-  // const userNameInput = document.getElementById("userName");
-  // const titleInput = document.getElementById("postTitle");
-  // const bunnyInput = document.getElementById("bunnySelect");
-  // const contentInput = document.getElementById("postContent");
-
   const form = e.target;
   const storyData = {
     userName: form.userName.value,
@@ -362,33 +358,8 @@ function addStoryEventListeners(storyElement, storyId) {
       .trim();
 
     // Load and populate bunny select options
-    try {
-      const response = await fetch("/api/bunnies/");
-      const data = await response.json();
-
-      if (!data.bunnies || !Array.isArray(data.bunnies)) {
-        console.error("Invalid bunnies data received:", data);
-        return;
-      }
-
-      const bunnySelect = editForm.querySelector(".edit-bunny");
-      bunnySelect.innerHTML = '<option value="">Choose a bunny...</option>';
-
-      data.bunnies.forEach((bunny) => {
-        const option = document.createElement("option");
-        option.value = bunny.name;
-        option.textContent = bunny.name;
-        if (bunny.name === currentBunny) {
-          option.selected = true;
-        }
-        bunnySelect.appendChild(option);
-      });
-
-      console.log("Current bunny:", currentBunny);
-      console.log("Number of options added:", data.bunnies.length);
-    } catch (error) {
-      console.error("Error loading bunnies for edit form:", error);
-    }
+    const bunnySelect = editForm.querySelector(".edit-bunny");
+    await loadBunnies(bunnySelect, currentBunny);
 
     // Show the form and focus on username input
     editForm.classList.add("show");
