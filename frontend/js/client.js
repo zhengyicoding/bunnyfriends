@@ -231,13 +231,13 @@ function createStoryElement(story) {
         </div>
       </div>
       <div class="edit-form mt-3">
-        <form class="card p-3 bg-light">
+        <form class="card p-3 bg-light" name="editForm">
           <div class="mb-3">
             <label for="edit-username-${story._id}" class="form-label">Your Name</label>
             <input 
+              name="userName"
               type="text" 
-              class="form-control edit-username" 
-              id="edit-username-${story._id}" 
+              class="form-control" 
               value="${userName}"
               required
             >
@@ -245,9 +245,9 @@ function createStoryElement(story) {
           <div class="mb-3">
             <label for="edit-title-${story._id}" class="form-label">Story Title</label>
             <input 
+              name="title"
               type="text" 
-              class="form-control edit-title" 
-              id="edit-title-${story._id}" 
+              class="form-control" 
               value="${title}"
               required
             >
@@ -255,8 +255,8 @@ function createStoryElement(story) {
           <div class="mb-3">
             <label for="edit-bunny-${story._id}" class="form-label">Select Bunny</label>
             <select 
-              class="form-control edit-bunny" 
-              id="edit-bunny-${story._id}"
+              name="bunnyName"
+              class="form-control" 
               required
             >
               <option value="">Choose a bunny...</option>
@@ -265,8 +265,8 @@ function createStoryElement(story) {
           <div class="mb-3">
             <label for="edit-content-${story._id}" class="form-label">Your Story</label>
             <textarea 
-              class="form-control edit-content" 
-              id="edit-content-${story._id}" 
+              name="content"
+              class="form-control" 
               rows="4"
               required
             >${content}</textarea>
@@ -278,7 +278,7 @@ function createStoryElement(story) {
         </form>
       </div>
     </div>
-  `;
+`;
 
   addStoryEventListeners(storyElement, story._id);
   columnWrapper.appendChild(storyElement);
@@ -330,7 +330,6 @@ function addStoryEventListeners(storyElement, storyId) {
   const editBtn = storyElement.querySelector(".edit-btn");
   const editForm = storyElement.querySelector(".edit-form");
   const saveBtn = storyElement.querySelector(".save-btn");
-  const cancelBtn = storyElement.querySelector(".cancel-btn");
 
   deleteBtn.addEventListener("click", async () => {
     if (confirm("Delete this story?")) {
@@ -348,36 +347,37 @@ function addStoryEventListeners(storyElement, storyId) {
   });
 
   editBtn.addEventListener("click", async () => {
-    // Show the edit form
     editForm.style.display = "block";
 
-    // Get current bunny name from the story card
     const currentBunny = storyElement
       .querySelector(".card-subtitle:nth-child(3)")
       .textContent.replace("Bunny: ", "")
       .trim();
 
-    // Load and populate bunny select options
-    const bunnySelect = editForm.querySelector(".edit-bunny");
-    await loadBunnies(bunnySelect, currentBunny);
+    // Get the form and bunny select by name
+    const form = editForm.querySelector("form");
+    await loadBunnies(form.bunnyName, currentBunny);
 
-    // Show the form and focus on username input
+    const cancelBtn = editForm.querySelector(".cancel-btn");
+    cancelBtn.onclick = () => {
+      editForm.classList.remove("show");
+      editForm.style.display = "none";
+    };
+
     editForm.classList.add("show");
-    editForm.querySelector(".edit-username").focus();
-  });
-
-  cancelBtn.addEventListener("click", () => {
-    editForm.classList.remove("show");
-    editForm.style.display = "none";
+    form.userName.focus();
   });
 
   saveBtn.addEventListener("click", async () => {
-    const newUserName = editForm.querySelector(".edit-username").value.trim();
-    const newTitle = editForm.querySelector(".edit-title").value.trim();
-    const newBunny = editForm.querySelector(".edit-bunny").value.trim();
-    const newContent = editForm.querySelector(".edit-content").value.trim();
+    const form = editForm.querySelector("form");
+    const formData = {
+      userName: form.userName.value.trim(),
+      title: form.title.value.trim(),
+      bunnyName: form.bunnyName.value.trim(),
+      content: form.content.value.trim(),
+    };
 
-    if (!newUserName || !newTitle || !newBunny || !newContent) {
+    if (Object.values(formData).some((value) => !value)) {
       alert("All fields are required.");
       return;
     }
@@ -385,27 +385,20 @@ function addStoryEventListeners(storyElement, storyId) {
     try {
       const response = await fetch(`/api/stories/${storyId}/update`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userName: newUserName,
-          title: newTitle,
-          bunnyName: newBunny,
-          content: newContent,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        // Update all fields in the display
-        storyElement.querySelector(".card-title").textContent = newTitle;
+        // Update display
+        storyElement.querySelector(".card-title").textContent = formData.title;
         storyElement.querySelector(".card-subtitle:nth-child(2)").textContent =
-          `By ${newUserName}`;
+          `By ${formData.userName}`;
         storyElement.querySelector(".card-subtitle:nth-child(3)").textContent =
-          `Bunny: ${newBunny}`;
-        storyElement.querySelector(".card-text").textContent = newContent;
+          `Bunny: ${formData.bunnyName}`;
+        storyElement.querySelector(".card-text").textContent = formData.content;
 
-        // Hide the edit form
+        // Hide form
         editForm.classList.remove("show");
         editForm.style.display = "none";
       } else {

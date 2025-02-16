@@ -16,8 +16,6 @@ router.get("/", async (req, res) => {
 // Create new story
 router.post("/", async (req, res) => {
   try {
-    console.log("Received story data:", req.body);
-
     // Validate incoming data
     const { userName, title, bunnyName, content } = req.body;
 
@@ -39,7 +37,7 @@ router.post("/", async (req, res) => {
 // Update story
 router.post("/:id/update", async (req, res) => {
   try {
-    const result = await storyCol.updateStory(req.params.id, req.body);
+    await storyCol.updateStory(req.params.id, req.body);
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
