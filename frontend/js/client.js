@@ -1,4 +1,23 @@
-// Navigation handling
+// 1. Utility Functions
+// 1.1 load template
+async function loadTemplate(name) {
+  const response = await fetch(`/templates/${name}`);
+  return await response.text();
+}
+// 1.2 Fetch and create bunny cards
+async function fetchBunnies() {
+  try {
+    const response = await fetch("/api/bunnies");
+    const data = await response.json();
+    return data.bunnies;
+  } catch (error) {
+    console.error("Error fetching bunnies:", error);
+    return [];
+  }
+}
+
+// 2. Navigation functions
+// 2.1 Show page event listener
 document.querySelectorAll(".nav-link").forEach((link) => {
   link.addEventListener("click", async (e) => {
     e.preventDefault();
@@ -15,7 +34,7 @@ document.querySelectorAll(".nav-link").forEach((link) => {
     await showPage(page);
   });
 });
-
+// 2.2 Show page function
 async function showPage(page) {
   const gallerySection = document.getElementById("gallerySection");
   const forumSection = document.getElementById("forumSection");
@@ -42,23 +61,8 @@ async function showPage(page) {
   }
 }
 
-// Fetch and create bunny cards
-async function fetchBunnies() {
-  try {
-    const response = await fetch("/api/bunnies");
-    const data = await response.json();
-    return data.bunnies;
-  } catch (error) {
-    console.error("Error fetching bunnies:", error);
-    return [];
-  }
-}
-
-async function loadTemplate(name) {
-  const response = await fetch(`/templates/${name}`);
-  return await response.text();
-}
-
+// 3. Gallery functions
+// 3.1 Create bunny cards
 async function createBunnyCards() {
   const gallery = document.getElementById("gallerySection");
   gallery.innerHTML = "";
@@ -91,7 +95,9 @@ async function createBunnyCards() {
   }
 }
 
-// Handle forum part
+// 4. Forum functions
+
+// 4.1 Load bunnies into select element
 async function loadBunnies(selectElement, currentBunny = null) {
   const bunnies = await fetchBunnies();
 
@@ -112,19 +118,17 @@ async function loadBunnies(selectElement, currentBunny = null) {
     selectElement.appendChild(option);
   });
 }
-
-// Global variable to store current filter
+// 4.2 Filter stories functions
+// 4.2.1 Global variable to store current filter
 let currentBunnyFilter = null;
 
-// Function to create bunny filter tags
+// 4.2.2 Function to create bunny filter tags
 async function createBunnyFilters() {
   const bunnies = await fetchBunnies();
   const filterContainer = document.getElementById("bunnyFilterContainer");
 
-  // Clear existing filters
   filterContainer.innerHTML = "";
 
-  // Add "All" filter
   const allTag = document.createElement("button");
   allTag.className = "btn btn-sm bunny-tag active";
   allTag.textContent = "All";
@@ -141,7 +145,7 @@ async function createBunnyFilters() {
   });
 }
 
-// Function to filter stories
+// 4.2.3 Function to filter stories
 function filterStories(bunnyName) {
   currentBunnyFilter = bunnyName;
 
@@ -172,6 +176,9 @@ function filterStories(bunnyName) {
     }
   });
 }
+
+// 4.3 Forum Function for story management
+// 4.3.1 Load stories
 async function loadStories() {
   try {
     const response = await fetch("/api/stories");
@@ -201,6 +208,8 @@ async function loadStories() {
     console.error("Error loading stories:", error);
   }
 }
+
+//4.3.2 Function to create story element
 async function createStoryElement(story) {
   if (!story) {
     console.error("No story data provided to createStoryElement");
@@ -337,8 +346,8 @@ async function createStoryElement(story) {
     return null;
   }
 }
-// Handle form submission
 
+// 4.3.3 Handle create new story form submission
 document.getElementById("postForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -379,7 +388,7 @@ document.getElementById("postForm").addEventListener("submit", async (e) => {
   }
 });
 
-// Initialize
+// 5. Page initialize
 document.addEventListener("DOMContentLoaded", async () => {
   // Show gallery by default
   await showPage("gallery");
