@@ -47,7 +47,7 @@ Currently there is no user authentication and authorisation mechanism in place s
 
 ## Database:
 
-Collection 1: bunnies, with 52 records of available JellyCat bunnies. Support read on bunnies.
+Collection 1: bunnies, with 52 records of available JellyCat bunnies. Support read on bunnies.  
 Collection 2: stories, with 1,000 records of story posts on the forum. Support filter by bunny name and CRUD operations on forum posts.
 
 ## Screenshots:
@@ -74,7 +74,7 @@ Collection 2: stories, with 1,000 records of story posts on the forum. Support f
 
 [Slides](https://docs.google.com/presentation/d/18rOBpBCS3tAUMyN8lWESbDy9P3ZVbvfJfD79cNXqcfg/edit?usp=sharing)
 
-[Video Demo]
+[Video Demo](https://youtu.be/tImfSZVsWPY)
 
 ## LLM Usage
 
