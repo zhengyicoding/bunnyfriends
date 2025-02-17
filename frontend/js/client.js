@@ -374,15 +374,23 @@ document.getElementById("postForm").addEventListener("submit", async (e) => {
       throw new Error(errorData.error || "Failed to create story");
     }
 
+    // Wait for the new story to be created
     const newStory = await response.json();
     console.log("Server response:", newStory);
 
-    // Refresh the stories list and show the forum section
-    await showPage("forum");
-    await loadStories();
-
-    // Clear the form
+    // Clear the form before loading new content
     form.reset();
+
+    // Update the forum section
+    const forumSection = document.getElementById("forumSection");
+    forumSection.classList.remove("section-hidden");
+    forumSection.classList.add("section-visible");
+
+    // Ensure bunny filters are created before loading stories
+    await createBunnyFilters();
+
+    // Finally load the stories
+    await loadStories();
   } catch (error) {
     console.error("Error creating story:", error);
   }
